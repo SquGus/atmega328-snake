@@ -20,6 +20,18 @@ unsigned int dots[64] = {
     0x0802, 0x0702, 0x0602, 0x0502, 0x0402, 0x0302, 0x0202, 0x0102,
     0x0801, 0x0701, 0x0601, 0x0501, 0x0401, 0x0301, 0x0201, 0x0101
 };
+
+void clear() {
+    MandaMax7219(0x0800);
+    MandaMax7219(0x0700);
+    MandaMax7219(0x0600);
+    MandaMax7219(0x0500);
+    MandaMax7219(0x0400);
+    MandaMax7219(0x0300);
+    MandaMax7219(0x0200);
+    MandaMax7219(0x0100);
+}
+
 unsigned int i;
 
 void main(void) {
@@ -28,7 +40,7 @@ void main(void) {
         for (i = 0; i < 64; i++) {
             MandaMax7219(dots[i]);
             delay_ms(500);
-            MandaMax7219(0x0000);
+            clear();
         }
     }
 }

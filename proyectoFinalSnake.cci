@@ -1,7 +1,8 @@
-VERSION:3 SOURCE_TIMESTAMP:4B7B8C86
+VERSION:3 SOURCE_TIMESTAMP:4B7B90B2
 NODE:I LEVEL:0 LINE:9 "C:\cvavreval\inc\mega328P.h"
 NODE:I LEVEL:0 LINE:10 "C:\cvavreval\inc\delay.h"
 NODE:I LEVEL:0 LINE:11 "Z:\Users\home\Applications\Wineskin\CodeVisionProjects\proyecto-final-snake\matriz.h"
 NODE:V LEVEL:0 LINE:13 "dots -> RAM:????"
-NODE:V LEVEL:0 LINE:23 "i -> RAM:????"
-NODE:F LEVEL:0 LINE:25 "main(void)"
+NODE:F LEVEL:0 LINE:24 "clear(void)"
+NODE:V LEVEL:0 LINE:35 "i -> RAM:????"
+NODE:F LEVEL:0 LINE:37 "main(void)"
