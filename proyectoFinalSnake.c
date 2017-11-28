@@ -5,10 +5,33 @@
  * Coauthor: Gustavo Gutiérrez Gómez
  * Coauthor: Eduardo Tavarez Quezada
  */
-
+             
+ #asm
+   .equ __lcd_port=0x05
+   .equ __lcd_EN=1
+   .equ __lcd_RS=0
+   .equ __lcd_D4=2
+   .equ __lcd_D5=3
+   .equ __lcd_D6=4
+   .equ __lcd_D7=5
+#endasm
+ 
+ 
 #include <mega328P.h>
+#include <display.h>
 #include <delay.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "matriz.h"
+
+signed char snakePos;
+signed char pelletPos;
+unsigned char snakeLen;
+unsigned char points;
+unsigned char direction;
+unsigned int speed;
+unsigned char pelletCatched=1;
+char cadena[8];
 
 unsigned int dots[64] = {
     0x0880, 0x0780, 0x0680, 0x0580, 0x0480, 0x0380, 0x0280, 0x0180,
@@ -21,7 +44,7 @@ unsigned int dots[64] = {
     0x0801, 0x0701, 0x0601, 0x0501, 0x0401, 0x0301, 0x0201, 0x0101
 };
 
-void clear() {
+void clearMax() {
     MandaMax7219(0x0800);
     MandaMax7219(0x0700);
     MandaMax7219(0x0600);
@@ -32,15 +55,91 @@ void clear() {
     MandaMax7219(0x0100);
 }
 
-unsigned int i;
+void setPellet(){
+    while((pelletPos = rand()%64) == snakePos);
+}
+
+unsigned char doCatchPellet() {
+    if (snakePos == pelletPos) {
+        points++;
+        if (points > 15) {
+            speed = 100;
+        } else {
+            speed = 500 - (points * 25);
+        }
+        return 1;
+    }
+    return 0;
+}
 
 void main(void) {
+    
+    srand(1);
     ConfiguraMax();
-    while(1) { 
-        for (i = 0; i < 64; i++) {
-            MandaMax7219(dots[i]);
-            delay_ms(500);
-            clear();
+    SetupLCD();
+    
+    PORTD = 0x0F;        // Pull-up de PD0 a PD3
+    snakePos = 19;
+    snakeLen = 1;
+    points = 0;
+    direction = 1;
+    speed = 500;
+    StringLCD("Puntos: ");
+    MoveCursor(8,0);
+    while(1) {    
+        // up       
+        CharLCD(points+48);   
+        MoveCursor(8,0);
+        if (PIND.0 == 0) {
+            direction = 0;
+        } else if (PIND.1 == 0) {
+            direction = 1;
+        } else if (PIND.2 == 0) {
+            direction = 2;
+        } else if (PIND.3 == 0) {
+            direction = 3;
         }
+        
+        switch (direction) {
+            case 0: {
+                snakePos -= 8;
+                if (snakePos < 0) {  
+                    snakePos += 64;
+                }
+                break;
+            }
+            case 1: {
+                snakePos += 1;
+                if (snakePos%8 == 0) {
+                    snakePos -= 8;
+                }
+                break;
+            }
+            case 2: {     
+                snakePos += 8;
+                if (snakePos > 63) {  
+                    snakePos -= 64;
+                }
+                break;
+            }
+            case 3: {         
+                snakePos -= 1;
+                if (snakePos%8 == 7 || snakePos == -1) {
+                    snakePos += 8;
+                }
+                break;
+            }
+        }
+        
+        pelletCatched = doCatchPellet();
+        if(pelletCatched) {
+            setPellet();
+            pelletCatched = 0;           
+        }
+        MandaMax7219(dots[snakePos]);  
+        MandaMax7219(dots[pelletPos]);
+        
+        delay_ms(speed);
+        clearMax();
     }
 }
