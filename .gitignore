@@ -12,4 +12,7 @@ Last Loaded Dados.DBK
 *.lst
 *.map
 *.srec
+*.txt
+*.cfg
+*.dmp
 .DS_STORE
