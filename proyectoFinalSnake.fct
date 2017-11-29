@@ -1,4 +1,4 @@
-main DSTACK_USAGE:0 DSTACK_LEVEL:0 FILE:"proyectoFinalSnake.c" LINE:75
+main DSTACK_USAGE:0 DSTACK_LEVEL:0 FILE:"proyectoFinalSnake.c" LINE:101
 SetupLCD DSTACK_USAGE:13 DSTACK_LEVEL:13 FILE:"C:\cvavreval\inc\display.h" LINE:19
 WriteComandLCD DSTACK_USAGE:3 DSTACK_LEVEL:16 FILE:"C:\cvavreval\inc\display.h" LINE:75
 SendDataBitsLCD DSTACK_USAGE:2 DSTACK_LEVEL:18 FILE:"C:\cvavreval\inc\display.h" LINE:55

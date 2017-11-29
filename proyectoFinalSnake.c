@@ -24,6 +24,13 @@
 #include <stdlib.h>
 #include "matriz.h"
 
+
+typedef struct node {
+    int position;
+    struct node* next;
+    struct node* prev;
+}node;
+
 signed char snakePos;
 signed char pelletPos;
 unsigned char snakeLen;
@@ -31,7 +38,12 @@ unsigned char points;
 unsigned char direction;
 unsigned int speed;
 unsigned char pelletCatched=1;
-char cadena[8];
+
+node* head;
+node* tail;
+
+
+
 
 unsigned int dots[64] = {
     0x0880, 0x0780, 0x0680, 0x0580, 0x0480, 0x0380, 0x0280, 0x0180,
@@ -43,6 +55,29 @@ unsigned int dots[64] = {
     0x0802, 0x0702, 0x0602, 0x0502, 0x0402, 0x0302, 0x0202, 0x0102,
     0x0801, 0x0701, 0x0601, 0x0501, 0x0401, 0x0301, 0x0201, 0x0101
 };
+
+void addpellet(node* last_node, int position)
+{
+    //declara la nueva cola
+    node* new_node = (struct node *)malloc(sizeof(struct node));
+    //declara el nuevo final de la lista
+    last_node->prev = new_node;
+    new_node->next = last_node;          
+    new_node->prev = NULL;
+    new_node->position = position;
+    tail = new_node;
+
+}
+
+
+void printsnake(node* head)
+{
+    node* cursor = head;
+    while(cursor != NULL)
+    {
+        cursor = cursor->prev;
+    }
+}
 
 void clearMax() {
     MandaMax7219(0x0800);
