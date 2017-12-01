@@ -68,33 +68,21 @@ void clearMax() {
 
 void endGame() {
     EraseLCD();
-    StringLCD("PERDISTE!");
+    StringLCD("PERDISTE! Pica");
     MoveCursor(0, 1);
-    StringLCD("Pica ");
     CharLCD(94);
     StringLCD(" para jugar");
-    while (PIND.0);
     gameRunning = 0;
 }
 
 void moveSnake() {
+    // Moves body of snake
     for (i = snakeLength - 1; i > 0; i--) {
-    //     // if ((direction == RIGHT) && (snakeX[0]-snakeLength == 7)) {
-    //     //     snakeX[0] = -1;
-    //     // } else if ((direction == LEFT) && (snakeX[0]+snakeLength == 0)) {
-    //     //     snakeX[0] = 8;
-    //     // } else {
-            snakeX[i] = snakeX[i-1];
-    //     // }
-
-    //     // if ((direction == UP) && (snakeY[0]+snakeLength == 0)) {
-    //     //     snakeY[0] = 8;
-    //     // } else if ((direction == DOWN) && (snakeY[0]-snakeLength == 7)) {
-    //     //     snakeY[0] = -1;
-    //     // } else {
-            snakeY[i] = snakeY[i-1];
-    //     // }
+        snakeX[i] = snakeX[i-1];
+        snakeY[i] = snakeY[i-1];
     }
+
+    // Moves head of snake depending on direction
     switch (direction) {
         case UP: {
             snakeY[0] = snakeY[0] + 1;
@@ -128,17 +116,20 @@ void moveSnake() {
 }
 
 void printBoard() {
+    // Deletes previous matrix
     for (i = 0; i < 8; i++) {
         for (j = 0; j < 8; j++) {
             matrix[i][j] = 0;
         }
     }
+    // Clears LED matrix
     clearMax();
+    // Assigns which LED's will turn on
     for (i = 0; i < snakeLength; i++) {
         matrix[snakeX[i]][snakeY[i]] = 1;
     }
     matrix[pelletX][pelletY] = 1;
-
+    // Scans each column and turns on respective LED's
     mX = 256;
     for (i = 0; i < 8; i++) {
         mY = 0;
@@ -157,14 +148,13 @@ void printBoard() {
     }
 }
 
-// void growSnake() {
-//     //declara el nuevo final de la lista
-//     tail->prev = new_node;
-//     new_node->next = tail;
-//     new_node->prev = NULL;
-//     new_node->position = lastPos;
-//     tail = new_node;
-// }
+void printScore() {
+    // Set up points in LCD
+    MoveCursor(0, 0);
+    StringLCD("Puntos: ");
+    MoveCursor(8,0);
+    CharLCD(points+48);   
+}
 
 char isCollinding(signed char x, signed char y) {
     for (i = 0; i < snakeLength - 1; i++) {
@@ -186,7 +176,7 @@ void increaseSpeed() {
     if (points > 15) {
         speed = 100;
     } else {
-        speed = 500 - (points * 25);
+        speed = 500 - (points * 35);
     }
 }
 
@@ -230,34 +220,43 @@ void main(void) {
     ConfiguraMax();
     SetupLCD();
 
-    // Create snake position arrays
-    snakeX[0] = 7;
-    snakeY[0] = 7;
-    snakeLength = 1;
-    for (i = 3; i < MAX_LENGTH_SNAKE; i++) {
-        snakeX[i] = -1;
-        snakeY[i] = -1;
-    }
+    // Displays initial message
+    StringLCD("SNAKE! Presiona");
+    MoveCursor(0, 1);
+    CharLCD(94);
+    StringLCD(" para jugar");
 
-    // Set up game variables
-    points = 0;
-    speed = 500;
-    direction = RIGHT;
-    gameRunning = 1;
-
-    // Set up points in LCD
-    StringLCD("Puntos: ");
-    MoveCursor(8,0);
-    CharLCD(points+48);   
-    MoveCursor(8,0);
+    gameRunning = 0;
 
     // Set up random seed
     srand(TCNT0);
 
-    setPellet();
-
     while (1) {
+        while(PIND.0);
+        EraseLCD();
+        // Set up random seed
+        srand(TCNT0);
+
+        // Create snake position arrays
+        snakeX[0] = 7;
+        snakeY[0] = 7;
+        snakeLength = 1;
+        for (i = 3; i < MAX_LENGTH_SNAKE; i++) {
+            snakeX[i] = -1;
+            snakeY[i] = -1;
+        }
+
+        // Set up game variables
+        points = 0;
+        speed = 500;
+        direction = RIGHT;
+        gameRunning = 1;
+
+        // Sets first pellet
+        setPellet();
+
         while (gameRunning) {
+            printScore();
             checkButtons();
             moveSnake();
             doEatPellet();
@@ -267,7 +266,5 @@ void main(void) {
             printBoard();
             delay_ms(speed);
         }
-        EraseLCD();
-        StringLCD("Esto ya paro");
     }
 }
