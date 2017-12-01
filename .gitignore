@@ -15,4 +15,5 @@ Last Loaded Dados.DBK
 *.txt
 *.cfg
 *.dmp
+*.DBK
 .DS_STORE
