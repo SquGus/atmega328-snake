@@ -241,7 +241,7 @@ void main(void) {
         snakeX[0] = 7;
         snakeY[0] = 7;
         snakeLength = 1;
-        for (i = 3; i < MAX_LENGTH_SNAKE; i++) {
+        for (i = 1; i < MAX_LENGTH_SNAKE; i++) {
             snakeX[i] = -1;
             snakeY[i] = -1;
         }
