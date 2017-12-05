@@ -213,9 +213,6 @@ void main(void) {
     // Pull-up from PD0 to PD3 (BUTTONS)
     PORTD = 0x0F;
 
-    // Start-up timer 0B in CK/1
-    TCCR0B = 0x01;
-
     // Configures Matrix and LCD
     ConfiguraMax();
     SetupLCD();
